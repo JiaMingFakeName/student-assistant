@@ -3,6 +3,7 @@ package com.studentassistant.service;
 import com.studentassistant.entity.Finance;
 import com.studentassistant.dto.FinanceDTO;
 import com.studentassistant.repository.FinanceRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ public class FinanceService {
     public Finance createFinance(FinanceDTO financeDTO) {
         Finance finance = new Finance();
         BeanUtils.copyProperties(financeDTO, finance);
+        // 手动触发时间戳设置
+        finance.onCreate(); // 新增此行
         return financeRepository.save(finance);
     }
 
@@ -34,14 +37,18 @@ public class FinanceService {
 
     public Finance updateFinance(Long id, FinanceDTO financeDTO) {
         Finance finance = financeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("财务记录不存在"));
-
+                .orElseThrow(() -> new EntityNotFoundException("财务记录不存在")); // 修改为 JPA 标准异常
         BeanUtils.copyProperties(financeDTO, finance);
         finance.setId(id);
+        // 手动触发更新时间戳
+        finance.onUpdate(); // 新增此行
         return financeRepository.save(finance);
     }
 
     public void deleteFinance(Long id) {
+        if (!financeRepository.existsById(id)) {
+            throw new EntityNotFoundException("财务记录不存在");
+        }
         financeRepository.deleteById(id);
     }
 

@@ -1,0 +1,195 @@
+{
+  "info": {
+    "name": "学习记录接口测试",
+    "_postman_id": "a1b2c3d4-5678-9012-3456-7890abcdef12",
+    "description": "包含学习记录的增删改查、条件查询及统计接口测试用例。",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+
+    {
+      "name": "1-1 正常创建学习记录",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"subject\":\"数学\",\"content\":\"内容\",\"studyDuration\":30,\"studyType\":\"课程\",\"difficultyLevel\":3}"
+        },
+        "url": { "raw": "http://localhost:8080/study", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "1-2 缺少必填字段",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"subject\":\"\",\"content\":\"内容\",\"studyDuration\":30,\"studyType\":\"课程\",\"difficultyLevel\":3}" },
+        "url": { "raw": "http://localhost:8080/study", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "1-3 学习时长为0",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"subject\":\"语文\",\"content\":\"内容\",\"studyDuration\":0,\"studyType\":\"课程\",\"difficultyLevel\":2}" },
+        "url": { "raw": "http://localhost:8080/study", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "1-4 难度等级超范围",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"subject\":\"英语\",\"content\":\"内容\",\"studyDuration\":20,\"studyType\":\"课程\",\"difficultyLevel\":6}" },
+        "url": { "raw": "http://localhost:8080/study", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "2-1 查询学习记录（有数据）",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/study", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "2-2 查询学习记录（无数据）",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/study", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "3-1 查询单条记录（存在ID）",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:8080/study/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study", "1"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "3-2 查询单条记录（不存在ID）",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:8080/study/9999", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study", "9999"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "4-1 更新学习记录（存在ID）",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"subject\":\"英语\",\"content\":\"更新内容\",\"studyDuration\":60,\"studyType\":\"自习\",\"difficultyLevel\":4}"
+        },
+        "url": { "raw": "http://localhost:8080/study/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study", "1"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "4-2 更新学习记录（不存在ID）",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"subject\":\"英语\",\"content\":\"更新内容\",\"studyDuration\":60,\"studyType\":\"自习\",\"difficultyLevel\":4}" },
+        "url": { "raw": "http://localhost:8080/study/9999", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study", "9999"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "5-1 删除学习记录（存在ID）",
+      "request": {
+        "method": "DELETE",
+        "url": { "raw": "http://localhost:8080/study/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study", "1"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "5-2 删除学习记录（不存在ID）",
+      "request": {
+        "method": "DELETE",
+        "url": { "raw": "http://localhost:8080/study/9999", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study", "9999"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "6-1 按科目查询（有数据）",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:8080/study/subject/数学", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study", "subject", "数学"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "6-2 按科目查询（无数据）",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:8080/study/subject/物理", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["study", "subject", "物理"] }
+      },
+      "response": []
+    },
+
+    {
+      "name": "7-1 统计接口（有数据）",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/study/statistics?start=2025-06-01T00:00:00&end=2025-06-30T23:59:59",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["study", "statistics"],
+          "query": [
+            { "key": "start", "value": "2025-06-01T00:00:00" },
+            { "key": "end", "value": "2025-06-30T23:59:59" }
+          ]
+        }
+      },
+      "response": []
+    },
+
+    {
+      "name": "7-2 统计接口（无数据）",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/study/statistics?start=2022-01-01T00:00:00&end=2022-01-31T23:59:59",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["study", "statistics"],
+          "query": [
+            { "key": "start", "value": "2022-01-01T00:00:00" },
+            { "key": "end", "value": "2022-01-31T23:59:59" }
+          ]
+        }
+      },
+      "response": []
+    }
+
+  ]
+}

@@ -3,23 +3,27 @@ package com.studentassistant.controller;
 import com.studentassistant.entity.Health;
 import com.studentassistant.dto.HealthDTO;
 import com.studentassistant.service.HealthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/health")
 public class HealthController {
 
+    private final HealthService healthService;
+
     @Autowired
-    private HealthService healthService;
+    public HealthController(HealthService healthService) {
+        this.healthService = healthService;
+    }
 
     @PostMapping
     public ResponseEntity<Health> createHealth(@Valid @RequestBody HealthDTO healthDTO) {
@@ -42,14 +46,19 @@ public class HealthController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Health> updateHealth(@PathVariable Long id, @Valid @RequestBody HealthDTO healthDTO) {
-        Health health = healthService.updateHealth(id, healthDTO);
-        return ResponseEntity.ok(health);
+        return healthService.getHealthById(id).map(existing -> {
+            Health updated = healthService.updateHealth(id, healthDTO);
+            return ResponseEntity.ok(updated);
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteHealth(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteHealth(@PathVariable Long id) {
+        if (healthService.getHealthById(id).isEmpty()) {
+            return ResponseEntity.status(404).body(Map.of("message", "Health record not found"));
+        }
         healthService.deleteHealth(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(Map.of("message", "Deleted successfully"));
     }
 
     @GetMapping("/statistics")
@@ -72,3 +81,4 @@ public class HealthController {
         return ResponseEntity.ok(statistics);
     }
 }
+

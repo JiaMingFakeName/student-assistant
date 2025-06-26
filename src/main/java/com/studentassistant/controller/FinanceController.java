@@ -3,8 +3,10 @@ package com.studentassistant.controller;
 import com.studentassistant.entity.Finance;
 import com.studentassistant.dto.FinanceDTO;
 import com.studentassistant.service.FinanceService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,5 +79,13 @@ public class FinanceController {
         statistics.put("records", finances);
 
         return ResponseEntity.ok(statistics);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleEntityNotFound(EntityNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return error;
     }
 }

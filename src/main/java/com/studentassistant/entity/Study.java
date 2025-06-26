@@ -44,8 +44,12 @@ public class Study {
 
     @PrePersist
     protected void onCreate() {
-        createdTime = LocalDateTime.now();
-        updatedTime = LocalDateTime.now();
+        if (createdTime == null) {
+            createdTime = LocalDateTime.now();
+        }
+        if (updatedTime == null) {
+            updatedTime = LocalDateTime.now();
+        }
     }
 
     @PreUpdate

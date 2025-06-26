@@ -44,7 +44,7 @@ public class Finance {
     private LocalDateTime updatedTime;
 
     @PrePersist
-    protected void onCreate() {
+    public void onCreate() {
         createdTime = LocalDateTime.now();
         updatedTime = LocalDateTime.now();
         if (transactionDate == null) {
@@ -53,7 +53,7 @@ public class Finance {
     }
 
     @PreUpdate
-    protected void onUpdate() {
+    public void onUpdate() {
         updatedTime = LocalDateTime.now();
     }
 }

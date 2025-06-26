@@ -23,6 +23,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     @Query("SELECT s FROM Schedule s WHERE s.reminderTime <= :now AND s.status != '已完成'")
     List<Schedule> findSchedulesNeedingReminder(@Param("now") LocalDateTime now);
 
-    @Query("SELECT s FROM Schedule s WHERE DATE(s.startTime) = DATE(:date)")
-    List<Schedule> findSchedulesByDate(@Param("date") LocalDateTime date);
+    // 修改为跨数据库兼容的日期查询
+    @Query("SELECT s FROM Schedule s " +
+            "WHERE s.startTime >= :startOfDay AND s.startTime < :endOfDay")
+    List<Schedule> findSchedulesByDate(
+            @Param("startOfDay") LocalDateTime startOfDay,
+            @Param("endOfDay") LocalDateTime endOfDay
+    );
 }

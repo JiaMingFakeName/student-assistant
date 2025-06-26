@@ -22,6 +22,10 @@ public class HealthService {
         BeanUtils.copyProperties(healthDTO, health);
         return healthRepository.save(health);
     }
+    public HealthService(HealthRepository healthRepository) {
+        this.healthRepository = healthRepository;
+    }
+
 
     public List<Health> getAllHealthRecords() {
         return healthRepository.findAll();

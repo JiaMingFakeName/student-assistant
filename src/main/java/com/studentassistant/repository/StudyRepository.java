@@ -22,7 +22,7 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     List<Study> findStudyRecordsByDateRange(@Param("start") LocalDateTime start,
                                             @Param("end") LocalDateTime end);
 
-    @Query("SELECT SUM(s.studyDuration) FROM Study s WHERE s.createdTime >= :start AND s.createdTime <= :end")
+    @Query("SELECT COALESCE(SUM(s.studyDuration), 0) FROM Study s WHERE s.createdTime >= :start AND s.createdTime <= :end")
     Integer getTotalStudyDurationByDateRange(@Param("start") LocalDateTime start,
                                              @Param("end") LocalDateTime end);
 }
